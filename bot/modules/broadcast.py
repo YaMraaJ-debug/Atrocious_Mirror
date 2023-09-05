@@ -50,7 +50,10 @@ async def broadcast(_, message):
         if (time() - updater) > 10:
             await editMessage(pls_wait, status.format(**locals()))
             updater = time()
-    await editMessage(pls_wait, status.format(**locals()) + f"\n\n<b>Elapsed Time:</b> <code>{get_readable_time(time() - start_time)}</code>")
+    await editMessage(
+        pls_wait,
+        f"{status.format(**locals())}\n\n<b>Elapsed Time:</b> <code>{get_readable_time(time() - start_time)}</code>",
+    )
         
         
 bot.add_handler(MessageHandler(broadcast, filters=command(BotCommands.BroadcastCommand) & CustomFilters.owner))

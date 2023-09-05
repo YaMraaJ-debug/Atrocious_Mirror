@@ -17,10 +17,7 @@ handler_dict = {}
 
 
 async def get_user_settings(from_user):
-    if config_dict['SA_MAIL']:
-        SA_MAIL = config_dict['SA_MAIL']
-    else:
-        SA_MAIL = ''
+    SA_MAIL = config_dict['SA_MAIL'] if config_dict['SA_MAIL'] else ''
     user_id = from_user.id
     name = from_user.mention
     buttons = ButtonMaker()
@@ -37,7 +34,7 @@ async def get_user_settings(from_user):
         users_index_url = user_dict['users_index_url']
     else:
         users_index_url = ''
-        
+
     buttons.ibutton("Close", f"user_td_set {user_id} close")
 
     text = f"""<u><b>Custom Drive Settings for</b> {name}</u>
@@ -56,8 +53,8 @@ async def update_user_settings(query):
 
 async def user_td_settings(_, message):
     user_id = message.from_user.id
-    if not config_dict['USER_TD_ENABLED']:
-        if user_id != OWNER_ID:
+    if user_id != OWNER_ID:
+        if not config_dict['USER_TD_ENABLED']:
             return await message.reply("<b>⚠️ User Team Drive Support Disabled By Owner.</b>")
     from_user = message.from_user
     handler_dict[from_user.id] = False

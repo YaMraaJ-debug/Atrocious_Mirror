@@ -34,7 +34,7 @@ async def _list_drive(key, message, item_type, isRecursive, user_id):
             return
         msg = f"<b>Found {contents_no} result for <i>{key}</i></b>"
         if config_dict['BOT_PM'] and message.chat.type != message.chat.type.PRIVATE:
-            ibmsg = f"<b>Hey. I have sent google drive search result in pm.</b>"
+            ibmsg = "<b>Hey. I have sent google drive search result in pm.</b>"
             bot_pm_button = ButtonMaker()
             bot_pm_button.ubutton("📥 Click Here To Go Bot PM", f"https://t.me/{bot_name}")
             await bot.send_message(chat_id=user_id, text=msg, reply_markup=button)

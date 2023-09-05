@@ -209,10 +209,10 @@ class YoutubeDLHelper:
             rate = audio_info[2]
             self.opts['postprocessors'].append(
                 {'key': 'FFmpegExtractAudio', 'preferredcodec': audio_format, 'preferredquality': rate})
-            if audio_format == 'vorbis':
-                self.__ext = '.ogg'
-            elif audio_format == 'alac':
+            if audio_format == 'alac':
                 self.__ext = '.m4a'
+            elif audio_format == 'vorbis':
+                self.__ext = '.ogg'
             else:
                 self.__ext = f'.{audio_format}'
 
@@ -255,14 +255,13 @@ class YoutubeDLHelper:
         LOGGER.info(f'Checking File/Folder if already in Drive: {self.name}')
         message = self.__listener.message
         user_id = message.from_user.id
-        filename = self.name 
-        if filename:
+        if filename := self.name:
             telegraph_content = await sync_to_async(GoogleDriveHelper(user_id).drive_list, filename, stopDup=True)
             if telegraph_content:
-                msg = f"File/Folder is already available in Drive."
+                msg = "File/Folder is already available in Drive."
                 await self.__listener.onDownloadError(msg)
                 return
-            
+
         if limit_exceeded := await limit_checker(self.__size, self.__listener, isYtdlp=True):
             await self.__listener.onDownloadError(limit_exceeded)
             return

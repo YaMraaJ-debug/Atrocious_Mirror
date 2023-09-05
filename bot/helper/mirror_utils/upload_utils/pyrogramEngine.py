@@ -74,16 +74,15 @@ class TgUploader:
             self.__thumb = None
         if config_dict['LOG_CHAT_ID']:
             self.__upload_dest = config_dict['LOG_CHAT_ID']
+        elif config_dict['BOT_PM']:
+            self.__upload_dest = self.__listener.message.from_user.id
         else:
-            if config_dict['BOT_PM']:
-                self.__upload_dest = self.__listener.message.from_user.id
-            else:
-                self.__upload_dest = self.__listener.upPath
+            self.__upload_dest = self.__listener.upPath
 
 
     async def __msg_to_reply(self):
         if self.__upload_dest:
-            msg = f"<b>••••• Leech Information: •••••</b>"
+            msg = "<b>••••• Leech Information: •••••</b>"
             msg += f"\n\n<b>• User: </b>{self.__listener.message.from_user.mention(style='HTML')}"
             msg += f"\n<b>• User ID: </b> <code>{self.__listener.message.from_user.id}</code>"
             msg += f"\n<b><a href='{self.__listener.message.link if self.__listener.isSuperGroup else self.__listener.message.text.lstrip('/')}'>• Leech Source Link</a></b>"

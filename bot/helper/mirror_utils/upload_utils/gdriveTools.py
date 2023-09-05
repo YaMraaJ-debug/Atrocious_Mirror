@@ -594,12 +594,11 @@ class GoogleDriveHelper:
                 if mime_type == "application/vnd.google-apps.folder":
                     furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
                     msg += f"📁 <code>{file.get('name')}<br>(folder)</code><br>"
-                    if config_dict['DISABLE_DRIVE_LINK']:
-                        if self.user_id == OWNER_ID:
-                            msg += f"<b><a href={furl}>Drive Link</a></b>"
-                        else:
-                            pass
-                    else:
+                    if (
+                        config_dict['DISABLE_DRIVE_LINK']
+                        and self.user_id == OWNER_ID
+                        or not config_dict['DISABLE_DRIVE_LINK']
+                    ):
                         msg += f"<b><a href={furl}>Drive Link</a></b>"
                     if index_url:
                         if isRecur:
@@ -611,24 +610,21 @@ class GoogleDriveHelper:
                         msg += f' <b>| <a href="{url}">Index Link</a></b>'
                 elif mime_type == 'application/vnd.google-apps.shortcut':
                     furl = f"https://drive.google.com/drive/folders/{file.get('id')}"
-                    if config_dict['DISABLE_DRIVE_LINK']:
-                        if self.user_id == OWNER_ID:
-                            msg += f"⁍<a href='https://drive.google.com/drive/folders/{file.get('id')}'>{file.get('name')}" \
-                                f"</a> (shortcut)"
-                        else:
-                            pass
-                    else:
+                    if (
+                        config_dict['DISABLE_DRIVE_LINK']
+                        and self.user_id == OWNER_ID
+                        or not config_dict['DISABLE_DRIVE_LINK']
+                    ):
                         msg += f"⁍<a href='https://drive.google.com/drive/folders/{file.get('id')}'>{file.get('name')}" \
                                 f"</a> (shortcut)"
                 else:
                     furl = f"https://drive.google.com/uc?id={file.get('id')}&export=download"
                     msg += f"📄 <code>{file.get('name')}<br>({get_readable_file_size(int(file.get('size', 0)))})</code><br>"
-                    if config_dict['DISABLE_DRIVE_LINK']:
-                        if self.user_id == OWNER_ID:
-                            msg += f"<b><a href={furl}>Drive Link</a></b>"
-                        else:
-                            pass
-                    else:
+                    if (
+                        config_dict['DISABLE_DRIVE_LINK']
+                        and self.user_id == OWNER_ID
+                        or not config_dict['DISABLE_DRIVE_LINK']
+                    ):
                         msg += f"<b><a href={furl}>Drive Link</a></b>"
                     if index_url:
                         if isRecur:

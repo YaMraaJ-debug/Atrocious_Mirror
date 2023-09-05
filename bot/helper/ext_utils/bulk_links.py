@@ -10,10 +10,10 @@ from json import loads as jloads
 async def get_direct_download_links(url: str, usr: str = 'None', pswd: str = 'None'):
     links_list, path = {}, ''
     page_token, pgNo, turn_page = '', 0, False
-    
+
     def authenticate(user, password):
         return "Basic " + b64encode(f"{user}:{password}".encode()).decode('ascii')
-    
+
     def gdindexScrape(link, auth, payload, npath):
         link = link.rstrip('/') + '/'
         cpost = post
@@ -28,24 +28,31 @@ async def get_direct_download_links(url: str, usr: str = 'None', pswd: str = 'No
         if (new_page_token := nresp.get("nextPageToken", False)):
             turn_page = True
             page_token = new_page_token
-        
+
         if list(nresp.get("data").keys())[0] == "error":
             raise Exception("Nothing Found in your provided URL")
-        
+
         data = {}
         files = nresp["data"]["files"]
         for i, _ in enumerate(range(len(files))):
             files_name = files[i]["name"]
             dl_link = f"{link}{quote(files_name)}"
             if files[i]["mimeType"] == "application/vnd.google-apps.folder":
-                data.update(gdindexScrape(dl_link, auth, {"page_token": page_token, "page_index": 0}, npath + f"/{files_name}"))
+                data.update(
+                    gdindexScrape(
+                        dl_link,
+                        auth,
+                        {"page_token": page_token, "page_index": 0},
+                        f"{npath}/{files_name}",
+                    )
+                )
             else:
                 data[dl_link] = npath
         return data
 
     auth = authenticate(usr, pswd)
     links_list.update(gdindexScrape(url, auth, {"page_token": page_token, "page_index": pgNo}, path))
-    while turn_page == True:
+    while turn_page:
         links_list.update(gdindexScrape(url, auth, {"page_token": page_token, "page_index": pgNo}, path))
         pgNo += 1
 

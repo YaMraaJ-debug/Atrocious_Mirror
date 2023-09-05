@@ -10,12 +10,11 @@ from aiofiles.os import remove as aioremove
 
 async def telegraph(client, message):
     if not message.reply_to_message:
-        return await message.reply(f"Please reply any photo to upload in telegraph")
-    elif message.reply_to_message:
-        photo_dir = await message.reply_to_message.download()
-        await asleep(1)
-        photos_link = f'https://graph.org{upload_file(photo_dir)[0]}'
-        await aioremove(photo_dir)
-        await message.reply(f"Telegraph Link : {photos_link}")
+        return await message.reply("Please reply any photo to upload in telegraph")
+    photo_dir = await message.reply_to_message.download()
+    await asleep(1)
+    photos_link = f'https://graph.org{upload_file(photo_dir)[0]}'
+    await aioremove(photo_dir)
+    await message.reply(f"Telegraph Link : {photos_link}")
 
 bot.add_handler(MessageHandler(telegraph, filters=command("tm")))

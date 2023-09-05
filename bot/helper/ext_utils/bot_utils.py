@@ -180,11 +180,13 @@ def get_readable_message():
                 up_speed += float(spd.split('K')[0]) * 1024
             elif 'M' in spd:
                 up_speed += float(spd.split('M')[0]) * 1048576
-    msg += f"_______________________________"
+    msg += "_______________________________"
     buttons = ButtonMaker()
-    buttons.ubutton(f"Repo", f"https://github.com/SN-Abdullah-Al-Noman/Atrocious_Mirror")
+    buttons.ubutton(
+        "Repo", "https://github.com/SN-Abdullah-Al-Noman/Atrocious_Mirror"
+    )
     buttons.ibutton("Refresh", "status ref")
-    buttons.ubutton(f"Group", f"https://t.me/+yw0A-x4cYBphZmJl")
+    buttons.ubutton("Group", "https://t.me/+yw0A-x4cYBphZmJl")
     button = buttons.build_menu(3)
     if tasks > STATUS_LIMIT:
         buttons = ButtonMaker()
@@ -397,43 +399,91 @@ def checking_access(message, button=None):
 
 def get_gdrive_id(user_id):
     user_dict = user_data.get(user_id, {})
-    if config_dict['USER_TD_ENABLED'] and user_dict.get('users_gdrive_id'):
-        GDRIVE_ID = user_dict['users_gdrive_id']
-    else:
-        GDRIVE_ID = config_dict['GDRIVE_ID']  
-    return GDRIVE_ID
+    return (
+        user_dict['users_gdrive_id']
+        if config_dict['USER_TD_ENABLED'] and user_dict.get('users_gdrive_id')
+        else config_dict['GDRIVE_ID']
+    )
 
 
 def get_index_url(user_id):
     user_dict = user_data.get(user_id, {})
-    if config_dict['USER_TD_ENABLED'] and user_dict.get('users_gdrive_id') and user_dict.get('users_index_url'):
-        INDEX_URL = user_dict['users_index_url']
-    else:
-        INDEX_URL = config_dict['INDEX_URL']  
-    return INDEX_URL
+    return (
+        user_dict['users_index_url']
+        if config_dict['USER_TD_ENABLED']
+        and user_dict.get('users_gdrive_id')
+        and user_dict.get('users_index_url')
+        else config_dict['INDEX_URL']
+    )
 
 
 async def set_commands(client):
     if config_dict['SET_COMMANDS']:
-        await client.set_bot_commands([
-        BotCommand(f'{BotCommands.MirrorCommand[0]}', f'or /{BotCommands.MirrorCommand[1]} Mirror'),
-        BotCommand(f'{BotCommands.LeechCommand[0]}', f'or /{BotCommands.LeechCommand[1]} Leech'),
-        BotCommand(f'{BotCommands.QbMirrorCommand[0]}', f'or /{BotCommands.QbMirrorCommand[1]} Mirror torrent using qBittorrent'),
-        BotCommand(f'{BotCommands.QbLeechCommand[0]}', f'or /{BotCommands.QbLeechCommand[1]} Leech torrent using qBittorrent'),
-        BotCommand(f'{BotCommands.YtdlCommand[0]}', f'or /{BotCommands.YtdlCommand[1]} Mirror yt-dlp supported link'),
-        BotCommand(f'{BotCommands.YtdlLeechCommand[0]}', f'or /{BotCommands.YtdlLeechCommand[1]} Leech through yt-dlp supported link'),
-        BotCommand(f'{BotCommands.CloneCommand[0]}', 'Copy file/folder to Drive'),
-        BotCommand(f'{BotCommands.CountCommand}', '[drive_url]: Count file/folder of Google Drive.'),
-        BotCommand(f'{BotCommands.StatusCommand[0]}', f'or /{BotCommands.StatusCommand[1]} Get mirror status message'),
-        BotCommand(f'{BotCommands.StatsCommand}', f'Check Bot & System stats'),
-        BotCommand(f'{BotCommands.BtSelectCommand}', 'Select files to download only torrents'),
-        BotCommand(f'{BotCommands.CancelMirror}', f'Cancel a Task'),
-        BotCommand(f'{BotCommands.CancelAllCommand[0]}', f'Cancel all tasks which added by you to in bots.'),
-        BotCommand(f'{BotCommands.ListCommand}', 'Search in Drive'),
-        BotCommand(f'{BotCommands.SearchCommand}', 'Search in Torrent'),
-        BotCommand(f'{BotCommands.UserSetCommand[0]}', 'Users settings'),
-        BotCommand(f'{BotCommands.HelpCommand}', 'Get detailed help'),
-        BotCommand(f'{BotCommands.BotSetCommand[0]}', 'Change Bot settings'),
-        BotCommand(f'{BotCommands.RestartCommand}', 'Restart the bot'),
-        BotCommand(f'{BotCommands.UserTdCommand}', 'Edit your own td and index settings'),
-            ])
+        await client.set_bot_commands(
+            [
+                BotCommand(
+                    f'{BotCommands.MirrorCommand[0]}',
+                    f'or /{BotCommands.MirrorCommand[1]} Mirror',
+                ),
+                BotCommand(
+                    f'{BotCommands.LeechCommand[0]}',
+                    f'or /{BotCommands.LeechCommand[1]} Leech',
+                ),
+                BotCommand(
+                    f'{BotCommands.QbMirrorCommand[0]}',
+                    f'or /{BotCommands.QbMirrorCommand[1]} Mirror torrent using qBittorrent',
+                ),
+                BotCommand(
+                    f'{BotCommands.QbLeechCommand[0]}',
+                    f'or /{BotCommands.QbLeechCommand[1]} Leech torrent using qBittorrent',
+                ),
+                BotCommand(
+                    f'{BotCommands.YtdlCommand[0]}',
+                    f'or /{BotCommands.YtdlCommand[1]} Mirror yt-dlp supported link',
+                ),
+                BotCommand(
+                    f'{BotCommands.YtdlLeechCommand[0]}',
+                    f'or /{BotCommands.YtdlLeechCommand[1]} Leech through yt-dlp supported link',
+                ),
+                BotCommand(
+                    f'{BotCommands.CloneCommand[0]}',
+                    'Copy file/folder to Drive',
+                ),
+                BotCommand(
+                    f'{BotCommands.CountCommand}',
+                    '[drive_url]: Count file/folder of Google Drive.',
+                ),
+                BotCommand(
+                    f'{BotCommands.StatusCommand[0]}',
+                    f'or /{BotCommands.StatusCommand[1]} Get mirror status message',
+                ),
+                BotCommand(
+                    f'{BotCommands.StatsCommand}', 'Check Bot & System stats'
+                ),
+                BotCommand(
+                    f'{BotCommands.BtSelectCommand}',
+                    'Select files to download only torrents',
+                ),
+                BotCommand(f'{BotCommands.CancelMirror}', 'Cancel a Task'),
+                BotCommand(
+                    f'{BotCommands.CancelAllCommand[0]}',
+                    'Cancel all tasks which added by you to in bots.',
+                ),
+                BotCommand(f'{BotCommands.ListCommand}', 'Search in Drive'),
+                BotCommand(
+                    f'{BotCommands.SearchCommand}', 'Search in Torrent'
+                ),
+                BotCommand(
+                    f'{BotCommands.UserSetCommand[0]}', 'Users settings'
+                ),
+                BotCommand(f'{BotCommands.HelpCommand}', 'Get detailed help'),
+                BotCommand(
+                    f'{BotCommands.BotSetCommand[0]}', 'Change Bot settings'
+                ),
+                BotCommand(f'{BotCommands.RestartCommand}', 'Restart the bot'),
+                BotCommand(
+                    f'{BotCommands.UserTdCommand}',
+                    'Edit your own td and index settings',
+                ),
+            ]
+        )

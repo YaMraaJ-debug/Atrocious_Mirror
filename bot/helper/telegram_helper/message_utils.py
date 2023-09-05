@@ -125,7 +125,7 @@ async def check_filename(message, filename=None):
 
     if filename is not None and any(filter_word in filename.lower() for filter_word in GLOBAL_BLACKLIST_FILE_KEYWORDS):
         msg = f"Hey {tag}.\n\nA Blacklist keyword found in your file/link.\n\n"
-        msg += f"You can not mirror or leech this file/link."
+        msg += "You can not mirror or leech this file/link."
         await delete_links(message)
         return await message.reply_photo(photo="https://graph.org/file/e6c2c38bc24feda59ad14.jpg", caption=msg)
 
@@ -223,8 +223,7 @@ async def chat_info(channel_id):
     else:
         return None
     try:
-        chat = await bot.get_chat(channel_id)
-        return chat
+        return await bot.get_chat(channel_id)
     except PeerIdInvalid as e:
         LOGGER.error(f"{e.NAME}: {e.MESSAGE} for {channel_id}")
         return None
@@ -270,8 +269,8 @@ async def BotPm_check(message, button=None):
 
 
 async def send_to_pm(message, text, buttons=None):
-    user_id = message.from_user.id
     if config_dict['BOT_PM']:
+        user_id = message.from_user.id
         try:
             return await message._client.send_message(chat_id=user_id, text=text, disable_web_page_preview=True, reply_markup=buttons)
         except:

@@ -116,7 +116,7 @@ async def __search(key, site, message, method, user_id):
     buttons.ubutton("🔎 View Search Result", link)
     button = buttons.build_menu(1)
     if config_dict['BOT_PM'] and message.chat.type != message.chat.type.PRIVATE:
-        ibmsg = f"<b>Hey. I have sent torrent search result in pm.</b>"
+        ibmsg = "<b>Hey. I have sent torrent search result in pm.</b>"
         bot_pm_button = ButtonMaker()
         bot_pm_button.ubutton("📥 Click Here To Go Bot PM", f"https://t.me/{bot_name}")
         await bot.send_message(chat_id=user_id, text=msg, reply_markup=button)

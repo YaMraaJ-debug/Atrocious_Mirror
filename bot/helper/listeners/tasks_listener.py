@@ -50,13 +50,8 @@ async def command_listener(message, isClone=False, isGdrive=False, isLeech=False
             msg = f"Hey {tag}.\n\nMirroring file in Gdrive is disabled."
         elif isQbit and not config_dict['TORRENT_ENABLED']:
             msg = f"Hey {tag}.\n\nTorrent download is disabled."
-        elif isQbit and isLeech and not config_dict['TORRENT_ENABLED'] and not config_dict['LEECH_ENABLED']:
-            msg = f"Hey {tag}.\n\nTorrent download and Leech both are disabled."
         elif isYtdl and not config_dict['YTDLP_ENABLED']:
             msg = f"Hey {tag}.\n\nYouTube download is disabled.</b>"
-        elif isYtdl and isLeech and not config_dict['YTDLP_ENABLED'] and not config_dict['LEECH_ENABLED']:
-            msg = f"Hey {tag}.\n\nYoutube download and Leeching file in telegram both are disabled."
-        
     if msg:
         await delete_links(message)
         return await sendMessage(message, msg)
@@ -370,7 +365,7 @@ class MirrorLeechListener:
         if self.isSuperGroup and config_dict['INCOMPLETE_TASK_NOTIFIER'] and DATABASE_URL:
             await DbManger().rm_complete_task(self.message.link)
         if config_dict['SAFE_MODE']:
-            gpmsg = f"<b>Name: </b>Safe Mode Enabled"
+            gpmsg = "<b>Name: </b>Safe Mode Enabled"
         else:
             gpmsg = f"<b>Name: </b><code>{escape(name)}</code>"
         bpmsg = f"<b>Name: </b><code>{escape(name)}</code>"
@@ -394,9 +389,9 @@ class MirrorLeechListener:
                         fmsg = ''
                 if fmsg != '':
                     if config_dict['BOT_PM'] and self.message.chat.type != self.message.chat.type.PRIVATE:
-                        lbpmsg = f'\n<b>Files has been sent in private.</b>'
                         bot_pm_button = ButtonMaker()
                         bot_pm_button.ubutton("📥 Click Here To Go Bot PM", f"https://t.me/{bot_name}")
+                        lbpmsg = f'\n<b>Files has been sent in private.</b>'
                         await sendMessage(self.message, gpmsg + msg + fmsg + lbpmsg, bot_pm_button.build_menu(1))
                     else:
                         await sendMessage(self.message, gpmsg + msg + fmsg)
@@ -419,8 +414,6 @@ class MirrorLeechListener:
                     if config_dict['DISABLE_DRIVE_LINK']:
                         if self.message.from_user.id == OWNER_ID and self.message.chat.type == self.message.chat.type.PRIVATE: 
                             buttons.ubutton("☁️ Drive Link", link)
-                        else:
-                            pass
                     else:
                         buttons.ubutton("☁️ Drive Link", link)
                 else:
@@ -437,9 +430,7 @@ class MirrorLeechListener:
                     share_url = f'{INDEX_URL}/{url_path}'
                     if mime_type == "Folder":
                         share_url += '/'
-                        buttons.ubutton("⚡ Index Link", share_url)
-                    else:
-                        buttons.ubutton("⚡ Index Link", share_url)
+                    buttons.ubutton("⚡ Index Link", share_url)
                 button = buttons.build_menu(2)
             else:
                 msg += f'\n\n• Path: <code>{rclonePath}</code>'
@@ -447,11 +438,11 @@ class MirrorLeechListener:
             msg += f'\n\n<b>• User: </b>{self.tag}'
             msg += f'\n<b>• User ID: </b> <code>{self.message.from_user.id}</code>'
             if config_dict['BOT_PM']:
-                bmsg = f'\n\n<b>Links has been sent in private.</b>'
                 bot_pm_button = ButtonMaker()
                 bot_pm_button.ubutton("📥 Click Here To Go Bot PM", f"https://t.me/{bot_name}")
                 await send_to_pm(self.message, bpmsg + msg, button)
                 if self.message.chat.type != self.message.chat.type.PRIVATE:
+                    bmsg = f'\n\n<b>Links has been sent in private.</b>'
                     await sendMessage(self.message, gpmsg + msg + bmsg, bot_pm_button.build_menu(1))
             else:
                 await sendMessage(self.message, gpmsg + msg, button)
